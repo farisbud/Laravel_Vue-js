@@ -108,8 +108,8 @@
                         <div class="form-group row">
                             <label class="col-md-2 col-form-label" for="text-input">Isi konten</label>
                             <div class="col-sm-4">
-                              <input id="content" value="{{old('content')}}" type="hidden" name="content">
-                              <trix-editor input="content"></trix-editor>
+                                <input id="content" value="{{old('content')}}" type="hidden" name="content">
+                                <trix-editor input="content"></trix-editor>
                               @error('content')
                                   <p class="text-danger">{{$message}}</p>
                               @enderror

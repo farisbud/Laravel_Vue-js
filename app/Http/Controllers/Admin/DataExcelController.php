@@ -18,13 +18,9 @@ class DataExcelController extends Controller
      */
     public function index()
     {
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
-
-        return view('admin.data_excel.list_excel',[
-            'data' => Perusahaan::with('data_excel')
-                                    ->latest()->paginate(10),
-
-        ],$data);
+        return response()->json([
+            'dataExcel'=> Perusahaan::with('data_excel')->latest()->get(),
+        ],200);
         //
     }
 
@@ -55,26 +51,27 @@ class DataExcelController extends Controller
      */
     public function store(Request $request)
     {
+        
         $messages = [
             'required' => ':attribute wajib diisi cuy!!!',
             'url' => ':attribute bukan tipe url pastikan menuliskan dengan benar'
         ];
         $request->validate([
-            'kd_saham' =>'required',
+            'perusahaan_id' =>'required',
             'judul' => 'required',
-            'excel'=> 'required|url',
+            'url_excel'=> 'required|url',
 
         ],$messages);
       
-            Data_excel::create([
-            'perusahaan_id'=>request('kd_saham'),
+         return Data_excel::create([
+            'perusahaan_id'=>request('perusahaan_id'),
             'judul' => request('judul'),
-            'url_excel' => request('excel'),
+            'url_excel' => request('url_excel'),
             
-        ]);
+        ],200);
 
 
-        return redirect('/admin/data-excel')->with('pesan','link berhasil ditambahkan');
+        //return redirect('/admin/data-excel')->with('pesan','link berhasil ditambahkan');
         //
     }
 
@@ -84,14 +81,22 @@ class DataExcelController extends Controller
      * @param  \App\Admin\Data_excel  $data_excel
      * @return \Illuminate\Http\Response
      */
-    public function show($excel)
+    public function show($id)
     {
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
+        // $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
 
-        $per = Perusahaan::find($excel);
-        $cel = Data_excel::where('perusahaan_id',$excel)->get();
-        return view('admin.data_excel.list_data_excel',compact('cel','per'),$data);
+        // $per = Perusahaan::find($excel);
+        // $cel = Data_excel::where('perusahaan_id',$excel)->get();
+        // return view('admin.data_excel.list_data_excel',compact('cel','per'),$data);
         //
+        return response()->json([
+            'perusahaan' => Perusahaan::find($id),
+
+            'excel' => Data_excel::with('perusahaan')
+                                    ->where('perusahaan_id', $id)
+                                    ->get(),
+                                
+        ],200);
     }
 
     /**
@@ -123,27 +128,27 @@ class DataExcelController extends Controller
      * @param  \App\Admin\Data_excel  $data_excel
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $excel)
+    public function update(Request $request, $id)
     {
         $messages = [
             'required' => ':attribute wajib diisi cuy!!!',
             'url' => ':attribute bukan tipe url pastikan menuliskan dengan benar'
         ];
         $request->validate([
-            'kd_saham' =>'required',
+            'perusahaan_id' =>'required',
             'judul' => 'required',
-            'excel'=> 'required|url',
+            'url_excel'=> 'required|url',
 
         ],$messages);
 
-        Data_excel::where('id', $excel)
-                ->update([
-                    'perusahaan_id'=>$request->kd_saham,
+            return Data_excel::where('id', $id)
+                    ->update([
+                    'perusahaan_id'=>$request->perusahaan_id,
                     'judul'=>$request->judul,
-                    'url_excel' =>$request->excel,
+                    'url_excel' =>$request->url_excel,
                 ]);
 
-        return redirect('/admin/data-excel/')->with('pesan','Data berhasil diupdate');
+        //return redirect('/admin/data-excel/')->with('pesan','Data berhasil diupdate');
 
 
         //
@@ -155,11 +160,12 @@ class DataExcelController extends Controller
      * @param  \App\Admin\Data_excel  $data_excel
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Data_excel $excel)
+    public function destroy(Data_excel $id)
     {
-        Data_excel::destroy($excel->id);
+
+        return Data_excel::destroy($id->id);
         
-        return redirect('/admin/data-excel')->with('pesan','data berhasil dihapus');
+       // return redirect('/admin/data-excel')->with('pesan','data berhasil dihapus');
         
     }
 }

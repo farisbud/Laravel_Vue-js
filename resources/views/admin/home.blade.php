@@ -12,18 +12,11 @@
 
     <div class="app-body" id="app">
 
-@include('admin.layout_admin.menu')
-      
-
-
-     
-              <router-view></router-view>
-              
-             
-
-              
+        @include('admin.layout_admin.menu')
     
-      
+            <router-view></router-view>
+            <vue-progress-bar></vue-progress-bar>
+    
     </div>
 
-    @include('admin.layout_admin.footer')
+@include('admin.layout_admin.footer')

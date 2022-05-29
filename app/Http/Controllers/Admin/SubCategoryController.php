@@ -19,10 +19,13 @@ class SubCategoryController extends Controller
     {
 
         
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
-        $cat = Category::with('sub_category')->latest()->get();
-    
-        return view('admin/sub_category/sub_category',compact('cat'),$data);
+        // $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
+        
+       
+        return response()->json([
+            'posts' => Category::with('sub_category')->latest()->get(),
+        ], 200);
+       
         //
     }
 
@@ -55,18 +58,26 @@ class SubCategoryController extends Controller
         ];
         $request->validate([
             'category_id' =>'required',
-            'Nama_sub' => 'required',
+            'Name_sub' => 'required',
 
         ],$messages);
 
-        Sub_category::create([
-            'category_id'=>request('category_id'),
-            'Name_sub' => request('Nama_sub'),
-        ]);
+        $sub = new Sub_category;
+        $sub->category_id = $request->category_id;
+        $sub->Name_sub = $request->Name_sub;
 
+        if($sub->save()){
+            return response()->json([
+                'status' => true,
+            ]);
+        }else{
+            return response()->json([
+                'status' => false,
+            ]);
 
-        return redirect('/admin/sub-kategori/')->with('pesan','Sub kategori berhasil ditambahkan');
-      //  return redirect('/admin/sub-kategori/{sub}/lihat')->wit('pesan','Sub kategori berhasil ditambahkan');
+        }
+    //    return redirect('/admin/sub-kategori/')->with('pesan','Sub kategori berhasil ditambahkan');
+    
     }
 
     /**
@@ -75,22 +86,30 @@ class SubCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($sub)
+    public function show($id)
     {
 
     
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
+        // $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
 
-        $suc = Sub_category::with('category')
-                            ->Where('category_id',$sub)
-                            ->get();
-        $cat = Category::find($sub);
+        // $suc = Sub_category::with('category')
+        //                     ->Where('category_id',$sub)
+        //                     ->get();
+        // $cat = Category::find($sub);
         
     
     
            
-        return view('admin.sub_category.list_sub',compact('suc','cat'),$data);
-       
+        // return view('admin.sub_category.list_sub',compact('suc','cat'),$data);
+        
+        return response()->json([
+            'subCategory'=> Sub_category::with('category')
+                            ->Where('category_id',$id)
+                            ->get(),
+            'category'   => Category::find($id),
+          
+
+        ], 200);
      
         //
     }
@@ -137,18 +156,24 @@ class SubCategoryController extends Controller
         ];
         $request->validate([
             'category_id' =>'required',
-            'Nama_sub' => 'required',
+            'Name_sub' => 'required',
 
         ],$messages);
 
-        Sub_category::where('id', $sub)
-                ->update([
-                    'category_id'=>$request->category_id,
-                    'Name_sub'=>$request->Nama_sub,
-                ]);
-        return redirect('/admin/sub-kategori/')->with('pesan','Data berhasil diupdate');
+      return Sub_category::where('id', $sub)
+                 ->update([
+                     'category_id'=>$request->category_id,
+                     'Name_sub'=>$request->Name_sub,
+                 ]);
+        
+                 // Sub_category::where('id', $sub)
+        //         ->update([
+        //             'category_id'=>$request->category_id,
+        //             'Name_sub'=>$request->Nama_sub,
+        //         ]);
+        // return redirect('/admin/sub-kategori/')->with('pesan','Data berhasil diupdate');
+            
 
-  
         //
     }
 
@@ -160,8 +185,9 @@ class SubCategoryController extends Controller
      */
     public function destroy(Sub_category $sub)
     {
-        Sub_category::destroy($sub->id);
-        return redirect('/admin/sub-kategori/')->with('pesan','sub kategori berhasil Dihapus');
+        // Sub_category::destroy($sub->id);
+        // return redirect('/admin/sub-kategori/')->with('pesan','sub kategori berhasil Dihapus');
+        return Sub_Category::destroy($sub->id);
         //
     }
 }

@@ -19,18 +19,18 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" type="text/css">
     <link href="{{asset('coreui/css/style.css')}}" rel="stylesheet">
     <link href="{{asset('coreui/vendors/pace-progress/css/pace.min.css')}}" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/trix.css">
-  <script type="text/javascript" src="/js/trix.js"></script>
+    {{-- <link rel="stylesheet" type="text/css" href="/css/trix.css">
+  <script type="text/javascript" src="/js/trix.js"></script> --}}
     <!-- Global site tag (gtag.js) - Google Analytics-->
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
-    <style>
+    {{-- <style>
         trix-toolbar [data-trix-button-group="file-tools"]{
 
           display: none;
         }
 
 
-    </style>
+    </style> --}}
     <script>
       window.dataLayer = window.dataLayer || [];
 
@@ -49,7 +49,7 @@
       <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="/admin/beranda">
+      <a class="navbar-brand" href="/admin">
         <img class="navbar-brand-full" src="{{asset('coreui/img/brand/logo.svg')}}" width="89" height="25" alt="CoreUI Logo">
         <img class="navbar-brand-minimized" src="{{asset('coreui/img/brand/sygnet.svg')}}" width="30" height="30" alt="CoreUI Logo">
       </a>

@@ -25,9 +25,15 @@ class ContentController extends Controller
      */
     public function index()
     {
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
-        $content = Content::latest()->paginate(10);
-        return view('admin.konten.list_konten',compact('content'),$data);
+        // $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
+        //$content = Content::latest()->paginate(10);
+        return response()->json([
+            'content'=>Content::latest()->get(),
+            
+            'cat'=> Category::latest()->get(),
+            'sub'=>Sub_Category::latest()->get(),
+
+        ],200);
         //
     }
 
@@ -46,22 +52,30 @@ class ContentController extends Controller
         //
     }
 
-    public function findSub(Request $request){
+    public function findSub(){
 
-		
+		$id = request('id');
+      
 	    //if our chosen id and products table prod_cat_id col match the get first 100 data 
       
         //$request->id here is the id of our chosen option id
       
 
 
-                $data= Sub_category::select('Name_sub','id')
-                ->where('category_id',$request->id)
-                ->take(100)
-                ->get();
+            //     $data= Sub_category::select('Name_sub','id')
+            //     ->where('category_id',$request->id)
+            //     ->take(100)
+            //     ->get();
 
-               return response()->json($data);//then sent this data to ajax success
-      
+            //    return response()->json($data);//then sent this data to ajax success
+
+
+           return response()->json([
+               'sub_category'=> Sub_category::where('category_id',$id)
+                                ->take(100)
+                                ->get(),
+
+           ]);//then sent this data to ajax success
         
 	}
 
@@ -77,29 +91,31 @@ class ContentController extends Controller
     public function store(Request $request)
     {
 
-     
+      
+
         $messages = [
             'required' => ':attribute wajib diisi cuy!!!',
            
             'mimes' =>':attribute harus format jpg,jpeg,bmp,png,webp',
             'max' => ':attribute file maksimal 1 mb',
+            'file' =>':attribute file harus berupa format jpeg,png,jpg,gif,svg',
         ];
         $data = request()->validate([
             //jika tidak ada validasi
             //'kosong'=>'',
             //image.* jika error
-            'sub_cat' => 'required',
+            'sub_category_id' => 'required',
             'caption' => 'required',
             'judul'   => 'required',
            
-            'content' => 'required', 
+            'description' => 'required', 
             'image_source' => '',
             'image'   => 'required|file|max:1024|mimes:jpeg,png,jpg,gif,svg',
            
         ],$messages);
 
      
-
+        // dd($request->file('image'));
    
         if ($request->file('image')) {
 
@@ -117,14 +133,14 @@ class ContentController extends Controller
             //$imageArray = ['image'=>$imagePath];
          }
          
-         $sub_content = Str::limit(strip_tags($request->content), 300);
+         $sub_content = Str::limit(strip_tags($request->description), 300);
 
-         Content::create([
-            'sub_category_id'=>request('sub_cat'),
+        return Content::create([
+            'sub_category_id'=>request('sub_category_id'),
             'caption' => request('caption'),
             'judul' => request('judul'),
             'sub_content' => $sub_content,
-            'description' => request('content'),
+            'description' => request('description'),
             'image_source'=> request('image_source'),
             'image'=> $imagePath,
         ]);
@@ -136,8 +152,8 @@ class ContentController extends Controller
       // \App\Post::create($data);
 
        
-        return redirect('/admin/konten/')->with('pesan','content berhasil ditambah');
-        //
+        // return redirect('/admin/konten/')->with('pesan','content berhasil ditambah');
+        
     }
 
 
@@ -163,12 +179,20 @@ class ContentController extends Controller
      * @param  \App\Admin\Content  $content
      * @return \Illuminate\Http\Response
      */
-    public function edit(Content $cont)
+    public function edit(Request $request, $id)
     {
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
+        // $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
         
-        $sub_cat = Sub_category::All();
-        return view('admin.konten.edit_konten', compact('cont','sub_cat'),$data);
+        // $sub_cat = Sub_category::All();
+        // return view('admin.konten.edit_konten', compact('cont','sub_cat'),$data);
+
+        $upload = Content::find($id);
+        return response()->json($upload);
+        // return response()->json([
+
+        //     'contentEdit' => Content::where('id', $id)->get(),
+
+        // ], 200);
         //
     }
 
@@ -182,60 +206,84 @@ class ContentController extends Controller
     public function update(Request $request, Content $cont)
     {
 
- 
-        $messages = [
+        
+     
+        // $upload = Content::find($cont);
+        // dd($request->file('image'));
+        
+         $currentPhoto = $cont->image;
+
+         $messages = [
             'required' => ':attribute wajib diisi cuy!!!',
            
             'mimes' =>':attribute harus format jpg,jpeg,bmp,png,webp',
             'max' => ':attribute file maksimal 1 mb',
+            'file' =>':attribute file harus berupa format jpeg,png,jpg,gif,svg',
         ];
 
         $data = request()->validate([
             //jika tidak ada validasi
             //'kosong'=>'',
             //image.* jika error
-            'sub_cat' => 'required',
+            'sub_category_id' => 'required',
             'caption' => 'required',
             'judul'   => 'required',
-            
-            'content' => 'required', 
+            'description' => 'required', 
             'image_source' => '',
-            'image'   => 'file|max:1024|mimes:jpeg,png,jpg,gif,svg',
+            'image.*'   => 'image|max:1024|mimes:jpeg,png,jpg,gif,svg',
            
         ],$messages);
-
+      
+        
         if ($request->file('image')) {
 
-            if($request->oldImage){
-                    Storage::disk('public')->delete($request->oldImage); 
-            }  
-        
-            $imagePath = $request->file('image')->store('gambar','public');
+             if($currentPhoto){
+
+             Storage::disk('public')->delete($currentPhoto); 
+
+            }
+
+            // $name = time().'.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
+
+            // $name = time()."-".$request->file('image')->getClientOriginalName();
+
+             $imagePath = $request->file('image')->store('gambar','public');
      
              $image = Image::make(public_path("storage/{$imagePath}"))->fit(2000,1500);
+
+             //$request->merge(['image' => $name]);
+
              $image->save();
             
             // $imageArray = ['image'=>$imagePath];
+           // $oldImage = public_path("storage/").$currentPhoto;
+
+            // if(file_exists($oldImage)){
+
+            //     Storage::disk('public')->delete($oldImage);
+
+            // }
+
          }
 
-        $sub_content = Str::limit(strip_tags($request->content), 300);
+        $sub_content = Str::limit(strip_tags($request->description), 300);
 
-      Content::where('id', $cont->id)
+     return Content::where('id', $cont->id)
                 ->update([
-                    'sub_category_id'=>$request->sub_cat,
+                    'sub_category_id'=>$request->sub_category_id,
                     'caption' => $request->caption,
                     'judul' =>$request->judul,
                     'sub_content'=>$sub_content,
-                    'description' =>$request->content,
+                    'description' =>$request->description,
                     'image_source' =>$request->image_source,
-                    'image' => $imagePath ?? $request->oldImage,
+                    'image' => $imagePath ?? $currentPhoto,
                     
                 ]);
              
 
                 
         
-        return redirect('/admin/konten/')->with('pesan','data berhasil diupdate');
+        // return redirect('/admin/konten/')->with('pesan','data berhasil diupdate');
         
         //
     }
@@ -246,16 +294,21 @@ class ContentController extends Controller
      * @param  \App\Admin\Content  $content
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Content $cont)
+    public function destroy(Content $id)
     {
-      if($cont->image){
+    //   if($cont->image){
 
-        Storage::disk('public')->delete($cont->image);
+    //     Storage::disk('public')->delete($cont->image);
 
-      }
-        Content::destroy($cont->id);
-        return redirect('/admin/konten/')->with('pesan','data berhasil dihapus');
-        
+    //   }
+    //     Content::destroy($cont->id);
+    //     return redirect('/admin/konten/')->with('pesan','data berhasil dihapus');
+        if($id->image){
+
+            Storage::disk('public')->delete($id->image);
+    
+          }
+           return Content::destroy($id->id);
       
         //
     }

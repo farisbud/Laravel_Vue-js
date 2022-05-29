@@ -17,15 +17,9 @@ class navBarController extends Controller
      */
     public function index()
     {
-
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
-
-        
-        return view('admin.navbar.list_navbar',[
-            
-            'nav' => Navbar::all(),
-
-        ],$data);
+        return response()->json([
+            'nav' => Navbar::all()
+        ],200);
         //
     }
 

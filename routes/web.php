@@ -56,33 +56,34 @@ Route::get('/logout','Admin\LoginController@log_out')->name('log_out');
 Route::middleware(['AuthCheck'])->group(function () {
     
     Route::get('/admin-login','Admin\LoginController@index');
-    Route::get('/admin/beranda','Admin\HomeController@index');
-    
+    Route::get('/{any}','Admin\HomeController@index')->where('any','.*');
+   // Route::get('/getSubKategori/?{any}','Admin\HomeController@index')->where('any','.*');
     //kategori
-    Route::get('/admin/kategori/','Admin\CategoryController@index')->name('kategori');
-    Route::get('/admin/kategori/tambah','Admin\CategoryController@create')->name('tambah_kat');
-    Route::post('/admin/kategori/','Admin\CategoryController@store')->name('store_cat');
-    Route::delete('/admin/kategori/{cat}','Admin\CategoryController@destroy');
-    Route::get('/admin/kategori/{cat}/edit','Admin\CategoryController@edit');
-    Route::patch('/admin/kategori/{cat}','Admin\CategoryController@update');
+  //  Route::get('/admin/kategori/','Admin\CategoryController@index')->name('kategori');
+    // Route::get('/admin/kategori/tambah','Admin\CategoryController@create')->name('tambah_kat');
+    // Route::post('/admin/kategori/','Admin\CategoryController@store')->name('store_cat');
+    // Route::delete('/admin  /kategori/{cat}','Admin\CategoryController@destroy');
+    // Route::get('/admin/kategori/{cat}/edit','Admin\CategoryController@edit');
+    // Route::patch('/admin/kategori/{cat}','Admin\CategoryController@update');
 
     //sub kategori
-    Route::get('/admin/sub-kategori/','Admin\SubCategoryController@index');
-    Route::get('/admin/sub-kategori/{sub}/lihat','Admin\SubCategoryController@show');
-    Route::get('/admin/sub-kategori/tambah','Admin\SubCategoryController@create');
-    Route::post('/admin/sub-kategori/','Admin\SubCategoryController@store')->name('store_sub');
-    Route::delete('/admin/sub-kategori/{sub}','Admin\SubCategoryController@destroy');
-    Route::get('/admin/sub-kategori/{sub}/edit','Admin\SubCategoryController@edit');
-    Route::patch('/admin/sub-kategori/{sub}','Admin\SubCategoryController@update');
+    // Route::get('/admin/sub-kategori/','Admin\SubCategoryController@index');
+    // Route::get('/admin/sub-kategori/{sub}/lihat','Admin\SubCategoryController@show');
+    // Route::get('/admin/sub-kategori/tambah','Admin\SubCategoryController@create');
+    // Route::post('/admin/sub-kategori/','Admin\SubCategoryController@store')->name('store_sub');
+    // Route::delete('/admin/sub-kategori/{sub}','Admin\SubCategoryController@destroy');
+    // Route::get('/admin/sub-kategori/{sub}/edit','Admin\SubCategoryController@edit');
+    // Route::patch('/admin/sub-kategori/{sub}','Admin\SubCategoryController@update');
 
     //konten
-    Route::get('/admin/konten/','Admin\ContentController@index');
-    Route::get('/admin/konten/tambah','Admin\ContentController@create');
-    Route::post('/admin/konten/','Admin\ContentController@store')->name('store_content');
-    Route::delete('/admin/konten/{cont}','Admin\ContentController@destroy');
-    Route::get('/admin/konten/findSub','Admin\ContentController@findSub');
-    Route::get('/admin/konten/{cont}/edit','Admin\ContentController@edit');
-    Route::patch('/admin/konten/{cont}','Admin\ContentController@update');
+    // Route::get('/admin/konten/','Admin\ContentController@index');
+    // Route::get('/admin/konten/tambah','Admin\ContentController@create');
+    // Route::post('/admin/konten/','Admin\ContentController@store')->name('store_content');
+    // Route::delete('/admin/konten/{cont}','Admin\ContentController@destroy');
+    // Route::get('/admin/konten/findSub','Admin\ContentController@findSub');
+    // Route::get('/admin/konten/{cont}/edit','Admin\ContentController@edit');
+    // Route::patch('/admin/konten/{cont}','Admin\ContentController@update');
+  
     //bisa pakai ini
 
     // perusahaan

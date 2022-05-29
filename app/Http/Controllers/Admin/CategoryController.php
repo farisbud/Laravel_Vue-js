@@ -16,9 +16,13 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
-        $cat = Category::all();
-        return view('admin.category.category',compact('cat'),$data);
+        // $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
+        // $cat = Category::all();
+        return response()->json([
+            
+            'categorys'=> Category::all(),
+
+        ],200);
         //
     }
 
@@ -46,21 +50,40 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         
-        $messages = [
+         $messages = [
             'required' => ':attribute wajib diisi cuy!!!',
-            
-        ];
-        $request->validate([
-            'name' =>'required',
+            'string' => ':attribute harus berupa karakter',
+            'max' => ':attribute melebihi 30 karakter',
+         ];
+         $request->validate([
+             'Name_cat' =>'required|string|max:30',
 
-        ],$messages);
+         ],$messages);
 
-        Category::create([
-            'Name_cat' => request('name'),
-        ]);
+        // Category::create([
+        //     'Name_cat' => request('name'),
+        // ]);
 
-         return redirect('/admin/kategori')->with('pesan','Data berhasil disimpan'); 
+        //  return redirect('/admin/kategori')->with('pesan','Data berhasil disimpan'); 
         
+            // $category = new Category;
+            // $category->Name_cat = $request->name;
+
+            // if($category->save()){
+            //     return response()->json([
+            //         'status' => true,
+            //         'message'=>'category add successfuly'
+            //     ]);
+            // }else{
+            //     return response()->json([
+            //         'status' => false,
+            //         'message'=>'please try again'
+            //     ]);
+            // }
+            return Category::create([
+                     'Name_cat' => request('Name_cat'),
+                 ]);
+
         //
     }
 
@@ -100,19 +123,24 @@ class CategoryController extends Controller
     {
         $messages = [
             'required' => ':attribute wajib diisi cuy!!!',
-            
-        ];
-        $request->validate([
-            'name' =>'required',
+            'string' => ':attribute harus berupa karakter',
+            'max' => ':attribute melebihi 30 karakter',
+         ];
+         $request->validate([
+             'Name_cat' =>'required|string|max:30',
 
-        ],$messages);
+         ],$messages);
 
-        Category::where('id', $cat->id)
-                ->update([
-                    'Name_cat'=>$request->name,
-                ]);
-        return redirect('/admin/kategori/')->with('pesan','Data berhasil diupdate');
+        // Category::where('id', $cat->id)
+        //         ->update([
+        //             'Name_cat'=>$request->name,
+        //         ]);
+        // return redirect('/admin/kategori/')->with('pesan','Data berhasil diupdate');
         //
+        return Category::where('id', $cat->id)
+                ->update([
+                     'Name_cat'=>$request->Name_cat,
+                 ]);
     }
 
     /**
@@ -124,8 +152,8 @@ class CategoryController extends Controller
     public function destroy(Category $cat)
     {
 
-        Category::destroy($cat->id);
-        return redirect('/admin/kategori/')->with('pesan','Data berhasil Dihapus');
+        // Category::destroy($cat->id);
+        // return redirect('/admin/kategori/')->with('pesan','Data berhasil Dihapus');
        
         // $data=Category::destroy($cat->id_category);
 
@@ -138,6 +166,8 @@ class CategoryController extends Controller
         //     return redirect('/admin/kategori/')->with('pesan','Data gagal dihapus');
         // }
         //  
+
+        return Category::destroy($cat->id);
     
     }
 }

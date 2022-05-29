@@ -17,15 +17,11 @@ class PerusahaanController extends Controller
     public function index()
     {
 
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
+       return response()->json([
 
+        'perusahaan' => Perusahaan::latest()->get(),
 
-
-        return view('admin.perusahaan.list_perusahaan',[
-
-            'item'=> Perusahaan::latest()->paginate(10),
-
-            ],$data);
+       ],200);
         //
     }
 
@@ -51,38 +47,41 @@ class PerusahaanController extends Controller
      */
     public function store(Request $request)
     {
+       // return $request;
+        
         $messages = [
             'required' => ':attribute wajib diisi cuy!!!',
-            'email' => ':attribute harus di isi dengan benar'
+            'email' => ':attribute harus di isi dengan benar',
+            'numeric' => ':attribute harus berisi angka',
         ];
         $request->validate([
             'kd_saham' =>'required',
-            'nama_pt' => 'required',
+            'nama_lengkap' => 'required',
             'alamat' =>'required',
             'email'=>'required|email',
-            'no_telp' =>'required',
-            'deskripsi'=>'required',
-            'situs'=>'',
-            'tanggal'=>'required',
+            'no_telp' =>'required|numeric',
+            'description'=>'required',
+            'alamat_web'=>'',
+            'tanggal'=>'nullable|date',
             'papan' => 'required',
             'bidang' => 'required',
             'sector' =>'required',
             'sub_sector'=>'required',
             'industri'=>'required',
             'sub_industri'=>'required',
-            'administrasi'=>'required',
+            'biro_administrasi'=>'required',
 
             
         ],$messages);
 
-        Perusahaan::create([
+       return Perusahaan::create([
             'kd_saham'=>request('kd_saham'),
-            'nama_lengkap' => request('nama_pt'),
+            'nama_lengkap' => request('nama_lengkap'),
             'alamat' => request('alamat'),
             'email' => request('email'),
             'no_telp' => request('no_telp'),
-            'description'=> request('deskripsi'),
-            'alamat_web' => request('situs'),
+            'description'=> request('description'),
+            'alamat_web' => request('alamat_web'),
             'tanggal' => request('tanggal'),
             'papan' => request('papan'),
             'bidang'=>request('bidang'),
@@ -90,11 +89,11 @@ class PerusahaanController extends Controller
             'sub_sector' => request('sub_sector'),
             'industri' => request('industri'),
             'sub_industri' => request('sub_industri'),
-            'biro_administrasi' => request('administrasi'),
+            'biro_administrasi' => request('biro_administrasi'),
         ]);
 
 
-        return redirect('/admin/perusahaan')->with('pesan','perusahaan berhasil ditambahkan');
+        // return redirect('/admin/perusahaan')->with('pesan','perusahaan berhasil ditambahkan');
 
         //
     }
@@ -135,41 +134,43 @@ class PerusahaanController extends Controller
      * @param  \App\Admin\Perusahaan  $Perusahaan
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $per)
+    public function update(Request $request, $id)
     {
+        //return $request;
         $messages = [
             'required' => ':attribute wajib diisi cuy!!!',
-            'email' => ':attribute harus di isi dengan benar'
+            'email' => ':attribute harus di isi dengan benar',
+            'numeric' => ':attribute harus berisi angka',
         ];
         $request->validate([
             'kd_saham' =>'required',
-            'nama_pt' => 'required',
+            'nama_lengkap' => 'required',
             'alamat' =>'required',
             'email'=>'required|email',
-            'no_telp' =>'required',
-            'deskripsi'=>'required',
-            'situs'=>'',
-            'tanggal'=>'required',
+            'no_telp' =>'required|numeric',
+            'description'=>'required',
+            'alamat_web'=>'',
+            'tanggal'=>'nullable|date',
             'papan' => 'required',
             'bidang' => 'required',
             'sector' =>'required',
             'sub_sector'=>'required',
             'industri'=>'required',
             'sub_industri'=>'required',
-            'administrasi'=>'required',
+            'biro_administrasi'=>'required',
 
             
         ],$messages);
 
-        Perusahaan::where('id', $per)
+       return Perusahaan::where('id', $id)
                 ->update([
                     'kd_saham'=>$request->kd_saham,
-                    'nama_lengkap' => $request->nama_pt,
+                    'nama_lengkap' => $request->nama_lengkap,
                     'alamat' => $request->alamat,
                     'email' => $request->email,
                     'no_telp' => $request->no_telp,
-                    'description'=> $request->deskripsi,
-                    'alamat_web' => $request->situs,
+                    'description'=> $request->description,
+                    'alamat_web' => $request->alamat_web,
                     'tanggal' => $request->tanggal,
                     'papan' => $request->papan,
                     'bidang'=>$request->bidang,
@@ -177,11 +178,9 @@ class PerusahaanController extends Controller
                     'sub_sector' => $request->sub_sector,
                     'industri' => $request->industri,
                     'sub_industri' => $request->sub_industri,
-                    'biro_administrasi' => $request->administrasi,
+                    'biro_administrasi' => $request->biro_administrasi,
                 ]);
                 
-        return redirect('/admin/perusahaan')->with('pesan','Data berhasil diupdate');
-
         //
     }
 
@@ -191,13 +190,10 @@ class PerusahaanController extends Controller
      * @param  \App\Admin\Perusahaan  $Perusahaan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Perusahaan $per)
+    public function destroy(Perusahaan $id)
     {
         
-        Perusahaan::destroy($per->id);
+        return Perusahaan::destroy($id->id);
         
-        return redirect('/admin/perusahaan')->with('pesan','data berhasil dihapus');
-        
-        //
     }
 }

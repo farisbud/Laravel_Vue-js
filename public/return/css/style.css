@@ -10,7 +10,7 @@ body {
 
 
 #background {
-    background: url(http://127.0.0.1:8000/storage/banner/61769.jpg);
+    background: url(http://127.0.0.1/storage/banner/61769.jpg);
     background-position: center;
     background-size: cover;
     height: 225px; width: 100%;

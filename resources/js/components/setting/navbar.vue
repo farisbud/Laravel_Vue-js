@@ -6,7 +6,7 @@
             <ol class="breadcrumb">
             <li class="breadcrumb-item">Home</li>
             
-            <li class="breadcrumb-item active">Sub Kategori</li>
+            <li class="breadcrumb-item active">Setting</li>
             <!-- Breadcrumb Menu-->
             
             </ol>
@@ -15,7 +15,7 @@
               <div class="col-lg-12">
                 <div class="card">
                   <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Daftar Sub Kategori</div>
+                    <i class="fa fa-align-justify"></i> Nav Bar</div>
                 
                   <!-- <div class="alert alert-success">
                      
@@ -26,36 +26,32 @@
                       <thead>
                         <tr>
                           <th>no</th>
-                          <th>Kategori</th>
-                          <th>Jumlah sub kategori</th>
-                          
+                          <th>Email</th>
+                          <th>No Telp</th>
                           <th>Aksi</th>
                         </tr>
                       </thead>
                       <tbody>
 
-                          <tr v-for="(item, key) in posts" :key="item.id">                             
-                            <td>{{ key+1 }}</td>
-                            <td>{{ item.Name_cat }}</td>
-                            <td>{{ item.sub_category.length }}</td>
+                          <tr v-for="(item,key) in nav" :key="item.id">                             
+                            <td>{{ key + 1 }}</td>
+                            <td>{{ item.email }}</td>
+                            <td>{{ item.no_telp }}</td>
                             <td>
                                 <div class="form-group row">
-                                  
-                                    <router-link :to="{ name:'getSubKategori', params:{id:item.id} }">
+                                    <a href="">
                                         <fieldset>
-                                            <button type="submit"  class="btn btn-secondary btn-dark">Lihat</button>
+                                            <button type="submit"  class="btn btn-secondary btn-dark">Edit</button>
                                         </fieldset>
-                                    </router-link>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
                       </tbody>
                     </table>
-                      
+                    
                   </div>
-
                 </div>
-        
               </div>
               <!-- /.col-->
             </div>
@@ -68,21 +64,20 @@
     export default {
        data(){
            return {
-               posts : [],
-
+               nav :[]
            };
        },
        methods:{
            loadData(){
-               axios.get('api/admin/sub_kategori').then(response => {
-                    this.posts = response.data.posts;
-                }); 
-           },
-    
+               axios
+               .get('api/admin/navbar')
+               .then(response => {
+                   this.nav = response.data.nav;
+               });
+           }
        },
        created(){
            this.loadData();
-           
        }
 
     }

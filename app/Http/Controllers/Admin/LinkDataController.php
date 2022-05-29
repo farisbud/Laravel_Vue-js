@@ -17,13 +17,9 @@ class LinkDataController extends Controller
      */
     public function index()
     {
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
-        
-        return view('admin.link_data.link_data',[
-            'data'=> Perusahaan::with('link_data')->latest()->paginate(10),
-
-        ],$data);
-        //
+        return response()->json([
+            'dataLink'=> Perusahaan::with('link_data')->latest()->get(),
+        ]);
     }
 
     /**
@@ -54,29 +50,27 @@ class LinkDataController extends Controller
     public function store(Request $request)
     {
 
-    
+        
+        
         $messages = [
             'required' => ':attribute wajib diisi cuy!!!',
             'url' => ':attribute bukan tipe url pastikan menuliskan dengan benar'
         ];
         $request->validate([
-            'kd_saham' =>'required',
+            
+            'perusahaan_id' =>'required',
             'nama_url' => 'required',
             'url'=> 'required|url',
 
         ],$messages);
 
-              Link_data::create([
-            'perusahaan_id'=>request('kd_saham'),
-            'nama_url' => request('nama_url'),
-            'url' => request('url'),
+        return Link_data::create([
+        'perusahaan_id'=>request('perusahaan_id'),
+        'nama_url' => request('nama_url'),
+        'url' => request('url'),
             
         ]);
 
-
-        return redirect('/admin/data-link')->with('pesan','link berhasil ditambahkan');
-
-        //
     }
 
     /**
@@ -85,20 +79,18 @@ class LinkDataController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($link)
+    public function show($id)
     {
 
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
-
-        return view('admin.link_data.list_link_data',[
-
+      
+        return response()->json([
             'link'=> Link_data::with('perusahaan')
-                                ->where('perusahaan_id',$link)
-                                ->get(),
-
-            'per' => Perusahaan::find($link),
-
-        ],$data);
+                               ->where('perusahaan_id',$id)
+                               ->get(),
+                               
+            'per' => Perusahaan::find($id),
+            
+        ],200);
         //
     }
 
@@ -129,7 +121,7 @@ class LinkDataController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $link)
+    public function update(Request $request, $id)
     {
 
         $messages = [
@@ -137,19 +129,20 @@ class LinkDataController extends Controller
             'url' => ':attribute bukan tipe url pastikan menuliskan dengan benar'
         ];
         $request->validate([
-            'kd_saham' =>'required',
+            
+            'perusahaan_id' =>'required',
             'nama_url' => 'required',
             'url'=> 'required|url',
 
         ],$messages);
 
-        Link_data::where('id', $link)
+       return Link_data::where('id', $id)
                 ->update([
-                    'perusahaan_id'=>$request->kd_saham,
+                    'perusahaan_id'=>$request->perusahaan_id,
                     'nama_url'=>$request->nama_url,
                     'url' =>$request->url,
                 ]);
-        return redirect('/admin/data-link/')->with('pesan','Data berhasil diupdate');
+       // return redirect('/admin/data-link/')->with('pesan','Data berhasil diupdate');
 
 
         //
@@ -161,11 +154,12 @@ class LinkDataController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Link_data $link)
+    public function destroy(Link_data $id)
     {
-        Link_data::destroy($link->id);
         
-        return redirect('/admin/data-link')->with('pesan','data berhasil dihapus');
+        return Link_data::destroy($id->id);
+        
+        //return redirect('/admin/data-link')->with('pesan','data berhasil dihapus');
         //
     }
 }

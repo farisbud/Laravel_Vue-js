@@ -19,7 +19,7 @@ class LoginController extends Controller
     }
 
     public function log_in(request $request)
-    {
+    {   
         $request->validate([
             'username'=>'required',
             'password'=>'required|min:5',
@@ -34,7 +34,7 @@ class LoginController extends Controller
 
             if(Hash::check($request->password, $user->Password)){
                 $request->session()->put('LoggedUser',$user->id);
-                return redirect('admin/beranda#/home');
+                return redirect('/admin');
 
             }else{
                 return back()->with('gagal','password anda salah');

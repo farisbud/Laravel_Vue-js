@@ -4,17 +4,11 @@
     <nav class="sidebar-nav">
       <ul class="nav">
         <li class="nav-item">
-          <router-link to="home" class="nav-link">
+          <router-link to="/admin" class="nav-link">
             <i class="nav-icon icon-speedometer"></i> Dashboard
           </router-link>
          
         </li>
-      
-  
-  
-         
-           
-             
       
             <li class="nav-title">Data</li>
             <li class="nav-item nav-dropdown">
@@ -22,18 +16,19 @@
                 <i class="nav-icon icon-social-dropbox"></i>Data konten</a>
               <ul class="nav-dropdown-items">
                 <li class="nav-item">
-                  <router-link to="kategori" class="nav-link">
+                  <router-link to="/kategori" class="nav-link">
                     <i class="nav-icon icon-drop"></i>Kategori 
                   </router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link to="sub_kategori" class="nav-link">
+                  <router-link to="/sub_kategori" class="nav-link">
                     <i class="nav-icon icon-drop"></i>Sub Kategori
                   </router-link>
                 </li> 
                 <li class="nav-item">
-                  <a class="nav-link" href="/admin/konten/">
-                    <i class="nav-icon icon-list"></i>konten</a>
+                  <router-link to="/konten" class="nav-link">
+                    <i class="nav-icon icon-list"></i>konten
+                  </router-link>
                 </li> 
                
               </ul>
@@ -45,17 +40,18 @@
                 <i class="nav-icon icon-social-dropbox"></i>finance</a>
               <ul class="nav-dropdown-items">
                 <li class="nav-item">
-                  <a class="nav-link" href="/admin/perusahaan">
-                    <i class="nav-icon icon-drop"></i>Perusahaan</a>
-                </li>
+                 <router-link to="/perusahaan" class="nav-link">
+                    <i class="nav-icon icon-drop"></i>Perusahaan
+                </router-link>
+                  </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="/admin/data-link">
-                    <i class="nav-icon icon-drop"></i>Data-link</a>
-                </li> 
+                 <router-link to="/data_link" class="nav-link">
+                    <i class="nav-icon icon-drop"></i>Data-link
+                 </router-link>
                 <li class="nav-item">
-                  <a class="nav-link" href="/admin/data-excel">
-                    <i class="nav-icon icon-drop"></i>Data-excel</a>
-                </li> 
+                  <router-link to="/data_excel" class="nav-link">
+                    <i class="nav-icon icon-drop"></i>Data-excel
+                  </router-link>
                 
                 
               </ul>
@@ -68,17 +64,17 @@
                 <i class="nav-icon icon-social-dropbox"></i>Setting</a>
               <ul class="nav-dropdown-items">
                 <li class="nav-item">
-                  <a class="nav-link" href="/admin/akun">
-                    <i class="nav-icon icon-drop"></i>Akun</a>
-                </li>
+                  <router-link to="/akun" class="nav-link">
+                    <i class="nav-icon icon-drop"></i>Akun
+                  </router-link>
                 <li class="nav-item">
-                  <a class="nav-link" href="/admin/navbar">
-                    <i class="nav-icon icon-drop"></i>Nav Bar</a>
-                </li>
+                 <router-link to="/navbar" class="nav-link">
+                    <i class="nav-icon icon-drop"></i>Nav Bar
+                 </router-link>
                 <li class="nav-item">
-                  <a class="nav-link" href="/admin/about-us">
-                    <i class="nav-icon icon-drop"></i>About-Us</a>
-                </li>
+                  <router-link to="/about" class="nav-link">
+                    <i class="nav-icon icon-drop"></i>About-Us
+                  </router-link>
               </ul>
             </li>
             

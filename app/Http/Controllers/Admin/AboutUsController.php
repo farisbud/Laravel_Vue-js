@@ -19,14 +19,9 @@ class AboutUsController extends Controller
      */
     public function index()
     {
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
-
-
-        return view('admin.about-us.about-us',[
-            
+        return response()->json([
             'about' => About_us::all(),
-
-        ],$data);
+        ],200);
         //
     }
 

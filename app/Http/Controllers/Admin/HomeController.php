@@ -34,10 +34,22 @@ class HomeController extends Controller
 
         $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
 
-        $cat=Category::All();
-        $sub = Sub_category::All();
-        $content = Content::All();
-        $per = Perusahaan::all();
-        return view('admin.home',compact('cat','sub','content','per'),$data);
+       
+        return view('admin.home',$data);
+    }
+
+    public function count()
+    {
+        
+        
+        return response()->json([
+            'count'=> Category::All(),
+            'sub'=>Sub_category::All(),
+             'content'=>Content::All(),
+            'per' =>Perusahaan::All(),
+            ],200);
+
+            
+       
     }
 }

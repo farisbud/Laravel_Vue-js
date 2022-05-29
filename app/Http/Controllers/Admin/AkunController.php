@@ -17,13 +17,9 @@ class AkunController extends Controller
      */
     public function index()
     {
-
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
-        return view('admin.akun.list_akun',[
-
-            'akun' => Admin::latest()->paginate(10),
-
-        ],$data);
+        return response()->json([
+            'akun' => Admin::latest()->get(),
+        ],200);
         //
     }
 

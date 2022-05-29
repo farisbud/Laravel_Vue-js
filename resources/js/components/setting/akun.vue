@@ -6,7 +6,7 @@
             <ol class="breadcrumb">
             <li class="breadcrumb-item">Home</li>
             
-            <li class="breadcrumb-item active">Sub Kategori</li>
+            <li class="breadcrumb-item active">Setting</li>
             <!-- Breadcrumb Menu-->
             
             </ol>
@@ -15,7 +15,7 @@
               <div class="col-lg-12">
                 <div class="card">
                   <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Daftar Sub Kategori</div>
+                    <i class="fa fa-align-justify"></i> Daftar Akun</div>
                 
                   <!-- <div class="alert alert-success">
                      
@@ -26,36 +26,43 @@
                       <thead>
                         <tr>
                           <th>no</th>
-                          <th>Kategori</th>
-                          <th>Jumlah sub kategori</th>
-                          
+                          <th>Nama</th>
+                          <th>Username</th>
                           <th>Aksi</th>
                         </tr>
                       </thead>
                       <tbody>
 
-                          <tr v-for="(item, key) in posts" :key="item.id">                             
-                            <td>{{ key+1 }}</td>
-                            <td>{{ item.Name_cat }}</td>
-                            <td>{{ item.sub_category.length }}</td>
+                          <tr v-for="(item,key) in akun" :key="item.id">                             
+                            <td>{{ key + 1 }}</td>
+                            <td>{{ item.Name }}</td>
+                            <td>{{ item.Username }}</td>
                             <td>
                                 <div class="form-group row">
-                                  
-                                    <router-link :to="{ name:'getSubKategori', params:{id:item.id} }">
+                                    <form action="" method="post">
+                                
+                                    <fieldset>
+                                        <button onclick="return confirm('Yakin Hapus Data Roti?')" type="submit"  class="btn btn-secondary btn-danger">Hapus</button>
+                                    </fieldset>
+                                    </form> 
+                                    <a href="">
                                         <fieldset>
-                                            <button type="submit"  class="btn btn-secondary btn-dark">Lihat</button>
+                                            <button type="submit"  class="btn btn-secondary btn-dark">Edit</button>
                                         </fieldset>
-                                    </router-link>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
                       </tbody>
                     </table>
-                      
+                         <div  class="col-6 col-sm-4 col-md mb-3 mb-xl-0 text-center">
+                              <a href="">
+                              <button class="btn btn-primary" type="button">
+                                <i class="icon-plus "></i> Tambah</button></a>
+                        </div>
+                   
                   </div>
-
                 </div>
-        
               </div>
               <!-- /.col-->
             </div>
@@ -68,21 +75,20 @@
     export default {
        data(){
            return {
-               posts : [],
-
+               akun :[]
            };
        },
        methods:{
            loadData(){
-               axios.get('api/admin/sub_kategori').then(response => {
-                    this.posts = response.data.posts;
-                }); 
-           },
-    
+               axios
+               .get('api/admin/akun')
+               .then(response => {
+                   this.akun = response.data.akun;
+               });
+           }
        },
        created(){
            this.loadData();
-           
        }
 
     }
