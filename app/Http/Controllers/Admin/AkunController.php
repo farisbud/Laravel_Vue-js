@@ -44,7 +44,8 @@ class AkunController extends Controller
      */
     public function store(Request $request)
     {
-
+        
+        // dd($request);
         $messages = [
             'required' => ':attribute wajib diisi cuy!!!',
             'unique' =>':attribute , sudah ada yang pakai silahkan ganti',
@@ -54,24 +55,24 @@ class AkunController extends Controller
         ];
 
         $request->validate([
-            'nama' =>'required',
-            'username'=>'required|min:5|unique:admin',
-            'password' => 'required|min:5|max:12|confirmed',
+            'Name' =>'required',
+            'Username'=>'required|min:5|unique:admin',
+            'Password' => 'required|min:5|max:12|confirmed',
 
 
         ],$messages);
         
 
-        Admin::create([
+        return Admin::create([
         
-        'Name' => request('nama'),
-        'Username' => request('username'),
-        'Password'=>  Hash::make(request('password')),
+        'Name' => request('Name'),
+        'Username' => request('Username'),
+        'Password'=>  Hash::make(request('Password')),
         'remember_token' => Str::random(60),
 
         ]);
 
-        return redirect('/admin/akun')->with('pesan','data berhasil dimasukan');
+       // return redirect('/admin/akun')->with('pesan','data berhasil dimasukan');
         //
     }
 
@@ -112,8 +113,8 @@ class AkunController extends Controller
     {
 
 
-
-      $messages = [
+        
+        $messages = [
             'required' => ':attribute wajib diisi cuy!!!',
             'unique' =>':attribute , sudah ada yang pakai silahkan ganti',
             'confirmed'=> 'konfirmasi password tidak sama',
@@ -122,21 +123,22 @@ class AkunController extends Controller
         ];
 
         $request->validate([
-            'nama' =>'required',
-            'username'=>'required|min:5|unique:admin,Username,'.$akun->id,
-            
+            'Name' =>'required',
+            'Username'=>'required|min:5|unique:admin,Username,'.$akun->id,
+            // 'Password' => 'required|min:5|max:12|confirmed',
+
 
         ],$messages);
 
-        if($request->password){
+        if($request->Password){
 
            $request->validate([
             
-                'password' => 'required|min:5|max:12|confirmed',
+                'Password' => 'required|min:5|max:12|confirmed',
             
             ],$messages);
             
-            $pass = Hash::make($request->password);
+            $pass = Hash::make($request->Password);
               
         }else{
 
@@ -145,10 +147,10 @@ class AkunController extends Controller
         
             
 
-      Admin::where('id', $akun->id)
+      return Admin::where('id', $akun->id)
                 ->update([
-                    'Name'=>$request->nama,
-                    'Username' => $request->username,
+                    'Name'=>$request->Name,
+                    'Username' => $request->Username,
                     'Password' => $pass,
                     
                 ]);
@@ -156,7 +158,7 @@ class AkunController extends Controller
 
                 
         
-        return redirect('/admin/akun')->with('pesan','data berhasil diupdate');
+   //     return redirect('/admin/akun')->with('pesan','data berhasil diupdate');
         
      
         //
@@ -170,8 +172,8 @@ class AkunController extends Controller
      */
     public function destroy(Admin $akun)
     {
-        Admin::destroy($akun->id);
-        return redirect('/admin/akun/')->with('pesan','data berhasil dihapus');
+        return Admin::destroy($akun->id);
+        //return redirect('/admin/akun/')->with('pesan','data berhasil dihapus');
         
         //
     }

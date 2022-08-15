@@ -20,6 +20,7 @@ class LoginController extends Controller
 
     public function log_in(request $request)
     {   
+    
         $request->validate([
             'username'=>'required',
             'password'=>'required|min:5',

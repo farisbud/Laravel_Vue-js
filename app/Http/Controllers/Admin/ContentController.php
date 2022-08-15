@@ -230,12 +230,21 @@ class ContentController extends Controller
             'judul'   => 'required',
             'description' => 'required', 
             'image_source' => '',
-            'image.*'   => 'image|max:1024|mimes:jpeg,png,jpg,gif,svg',
+            //'image.*'   => 'image|max:1024|mimes:jpeg,png,jpg,gif,svg',
            
         ],$messages);
       
         
         if ($request->file('image')) {
+
+            $request()->validate([
+                //jika tidak ada validasi
+                //'kosong'=>'',
+                //image.* jika error
+               
+                'image'   => 'image|max:1024|mimes:jpeg,png,jpg,gif,svg',
+               
+            ],$messages);
 
              if($currentPhoto){
 

@@ -16,7 +16,7 @@ window.Form  = Form;
 // import Pagination from 'laravel-vue-pagination';
 // Vue.component('pagination', Pagination);
 
-// Vue.component('pagination', Pagination); 
+// Vue.component('pagination', Pagination);
 
 Vue.component('pagination', require('laravel-vue-pagination'));
 
@@ -24,7 +24,7 @@ import VueGoodTablePlugin from 'vue-good-table';
 import 'vue-good-table/dist/vue-good-table.css';
 
  import {
-   
+
 //     Button,
      HasError,
      AlertError,
@@ -33,7 +33,7 @@ import 'vue-good-table/dist/vue-good-table.css';
    } from 'vform/src/components/bootstrap5'
 //   // 'vform/src/components/bootstrap4'
 //   // 'vform/src/components/tailwind'
-  
+
 
 //   Vue.component(Button.name, Button)
    Vue.component(HasError.name, HasError)
@@ -60,7 +60,7 @@ const Toast = Swal.mixin({
     position:'top-end',
     showConfirmButton: false,
     timer:3000,
- 
+
 });
 
 window.Toast = Toast;
@@ -73,91 +73,14 @@ Vue.use(VueProgressBar, {
     height: '20px'
 });
 
-let routes = [
-    {
-        path: '/admin',
-        component:require('./components/home/home.vue').default
-
-    },
-    { 
-        path: '/kategori', 
-        component:require('./components/kategori/kategori.vue').default
-    },
-    { 
-        path: '/sub_kategori', 
-        component:require('./components/sub_kategori/sub_kategori.vue').default, 
-        // children: [
-        //     {   
-        //         name: 'getSubKategori',
-        //         path: '/getSubKategori/:id?', 
-        //         component:require('./components/sub_kategori/detail_sub_kategori.vue').default 
-        //     },
-            
-        // ]
-    },
-    {   
-        name: 'getSubKategori',
-        path: '/getSubKategori/:id?', 
-        component:require('./components/sub_kategori/detail_sub_kategori.vue').default 
-    },
-    {
-        path: '/konten',
-        component:require('./components/konten/konten.vue').default
-    },
-    {
-        path: '/perusahaan',
-        component:require('./components/perusahaan/perusahaan.vue').default
-    },
-    {
-        path: '/data_link',
-        component:require('./components/data/data_link.vue').default
-    },
-    {   
-        name: 'getDataLink',
-        path: '/getDataLink/:id?', 
-        component:require('./components/data/detail_data_link.vue').default 
-    },
-    {
-        path: '/data_excel',
-        component:require('./components/data/data_excel.vue').default
-    },
-    {
-        name:'getDataExcel',
-        path:'/getDataExcel/:id?',
-        component:require('./components/data/detail_data_excel.vue').default
-    },
-    {
-        path: '/akun',
-        component:require('./components/setting/akun.vue').default
-    },
-    {
-        path: '/navbar',
-        component:require('./components/setting/navbar.vue').default
-    },
-    {
-        path: '/about',
-        component:require('./components/setting/about_us.vue').default
-    },
-];
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
+import routes from './routes';
 
-
-const router = new VueRouter({
-    mode: 'history',
-    routes
-})
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -167,7 +90,7 @@ const router = new VueRouter({
 
 const app = new Vue({
     el: '#app',
-    
-    router,
-  
+
+   // router,
+    router: new VueRouter(routes),
 });

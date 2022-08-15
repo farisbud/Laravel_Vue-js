@@ -65,7 +65,7 @@
                                 <div class="form-group row">
                                     <label class="col-md-2 col-form-label" for="text-input">Riwayat Pendidikan</label>
                                     <div class="col-md-8">
-                                        <label class="col-md-8 col-form-label" for="text-input">{{ item.riwayat }}</label>
+                                        <label class="col-md-8 col-form-label" for="text-input" v-html="item.riwayat"></label>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -84,16 +84,16 @@
 
                                 <div class="form-group row justify-content-center">
                                     <div  class="text-center">
-                                        <a href="">
-                                        <button class="btn btn-warning" type="button">
-                                        <i class="icon-pencil "></i> Edit</button></a>
+                                        
+                                        <button class="btn btn-warning" type="button" @click="showModalEdit(item)">
+                                        <i class="icon-pencil "></i> Edit</button>
                                     </div>  
-                                    <form action="" method="post" enctype="multipart/form-data">
+                                    <!-- <form action="" method="post" enctype="multipart/form-data">
                                         
                                         <fieldset>
-                                            <button onclick="return confirm('Yakin Hapus Data Roti?')" type="submit"  class="btn btn-secondary btn-danger"><i class="icons cui-trash "></i> Hapus</button>
+                                            <button type="submit"  class="btn btn-secondary btn-danger"><i class="icons cui-trash "></i> Hapus</button>
                                         </fieldset>
-                                        </form> 
+                                        </form>  -->
                                 </div>
                             </span>
                             <span v-else>
@@ -104,6 +104,76 @@
                                     </div>        
                             </span>
                             </div>
+                        </div>
+                                  <!-- Modal -->
+                        <div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-labelledby="showModal1" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content" style="width: 200%;">
+                              <div class="modal-header">
+                                <h5 v-show="!statusModal" class="modal-title" id="exampleModalLongTitle">Tambah Akun</h5>
+                                <h5 v-show="statusModal" class="modal-title" id="exampleModalLongTitle">Edit Akun</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <form @submit.prevent="statusModal ? updateData() : saveData()">
+                                <div class="modal-body">
+                                  <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Visi:</label>
+                                        <VueTrix class="form-control" v-model="form.visi" :class="{ 'is-invalid' : form.errors.has('visi') }"/>
+                                    <has-error :form="form" field="visi"></has-error>                             
+                                  </div>
+                                   <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Misi:</label>
+                                        <VueTrix class="form-control" v-model="form.misi" :class="{ 'is-invalid' : form.errors.has('misi') }"/>
+                                    <has-error :form="form" field="misi"></has-error>                             
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">deskripsi:</label>
+                                        <VueTrix class="form-control" v-model="form.deskripsi" :class="{ 'is-invalid' : form.errors.has('deskripsi') }"/>
+                                    <has-error :form="form" field="deskripsi"></has-error>                             
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">nama lengkap:</label>
+                                      <input type="text" class="form-control" v-model="form.nama" :class="{ 'is-invalid' : form.errors.has('nama') }">
+                                    <has-error :form="form" field="nama"></has-error>                             
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">telp:</label>
+                                      <input type="text" class="form-control" v-model="form.telp" :class="{ 'is-invalid' : form.errors.has('telp') }">
+                                    <has-error :form="form" field="telp"></has-error>                             
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">riwayat pendidikan:</label>
+                                      <VueTrix class="form-control" v-model="form.riwayat" :class="{ 'is-invalid' : form.errors.has('riwayat') }"/>
+                                    <has-error :form="form" field="riwayat"></has-error>                             
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">nama dan gelar:</label>
+                                      <input type="text" class="form-control" v-model="form.pendidikan" :class="{ 'is-invalid' : form.errors.has('pendidikan') }">
+                                    <has-error :form="form" field="pendidikan"></has-error>                             
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Misi:</label>
+                                        <div v-if="imagePreview">
+                                            <img class="img-preview img-fluid mb-3" :src="imagePreview"/> 
+                                        </div>
+                                        <div v-else-if="imageEdit.image">
+                                            <img class="img-preview img-fluid mb-3" v-bind:src="'storage/' + imageEdit.image" />
+                                        </div>
+                                        <span><small><strong>Pastikan ukuran gambar dibawah *1 Mb</strong></small></span>
+                                        <input type="file" ref="fileupload" class="form-control-file" v-on:change="onFileChangeEdit" :class="{ 'is-invalid' : form.errors.has('image') }">
+                                    <has-error :form="form" field="misi"></has-error>                             
+                                  </div>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  <button v-show="statusModal" type="submit" class="btn btn-primary" :disabled="disabled"><i v-show="loading" class="fa fa-spinner fa-spin"></i> Update</button>
+                                  <button v-show="!statusModal" type="submit" class="btn btn-primary" :disabled="disabled"><i v-show="loading" class="fa fa-spinner fa-spin"></i> Simpan</button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
                         </div>
 
                   
@@ -116,19 +186,88 @@
        </main>
 </template>
 <script>
+
+import VueTrix from "vue-trix";
+
 export default {
+    components: {
+        VueTrix,
+    },
     data() {
         return {
-            about: [],
+            about: {},
+            statusModal: false,
+            loading: false,
+            disabled: false,
+            form: new Form({
+                id: "",
+                visi: "",
+                misi: "",
+                deskripsi: "",
+                nama: "",
+                alamat: "",
+                telp: "",
+                riwayat: "",
+                pendidikan: "",
+                image: "",
+            }),
+            imageEdit: {},
+            imagePreview: null,
+
         };
     },
 
     created(){
 
-        this.loadData()
+        this.loadData();
+        Fire.$on("refreshData", () => {
+            this.loadData();
+            this.clear();
+        });
 
     },
     methods:{
+        showModalEdit(item){
+
+            this.statusModal = true;
+            this.form.reset();
+                axios.get('api/getGambar/' + item.id)
+                        .then(response =>{
+                            this.imageEdit = response.data;
+                          //  console.log(this.imageEdit);
+                        });
+
+            $("#showModal").modal("show");
+            this.form.fill(item);
+
+        },
+
+        onFileChangeEdit(e){
+            let file = e.target.files[0] || e.dataTransfer.files[0];
+                let reader = new FileReader();  
+
+                if(file['size'] < 1111775)
+                {
+                     reader.onloadend = (file) => {
+                     this.form.image = e.target.files[0];
+                  
+                    //  console.log(reader.result);
+                    }              
+                     reader.readAsDataURL(file);
+                     reader.onload = e => {
+                     this.imagePreview = e.target.result;
+               };
+                }else{
+                    alert('File size can not be bigger than 1 MB')
+                }
+        },
+        
+        clear () {
+              const input = this.$refs.fileupload;
+              input.type = 'text';
+              input.type = 'file';
+        },
+
         loadData(){
             axios
             .get('api/admin/about')
@@ -136,7 +275,37 @@ export default {
                 this.about = response.data.about;
             });
 
-        }
+        },
+        updateData(){
+
+            this.$Progress.start();
+             this.loading = true;
+             this.disabled = true;
+             
+            
+             this.form.post('api/update_about/' + this.form.id)
+             .then(() => {
+
+               Fire.$emit("refreshData");
+
+               $("#showModal").modal("hide");
+
+                Toast.fire({
+                  icon: 'success',
+                  title: 'Data Berhasil Diupdate'
+                });
+
+                this.$Progress.finish();
+                this.loading = false;
+                this.disabled = false;
+             })
+             .catch(()=>{
+               this.$Progress.fail();
+              this.loading = false;
+              this.disabled = false;
+             });
+
+        },
 
     },
 }

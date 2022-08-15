@@ -16,8 +16,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        // $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
+        
+         //$data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
         // $cat = Category::all();
+      
         return response()->json([
             
             'categorys'=> Category::all(),

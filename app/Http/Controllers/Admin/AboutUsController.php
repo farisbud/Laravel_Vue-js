@@ -112,7 +112,7 @@ class AboutUsController extends Controller
       // \App\Post::create($data);
 
        
-        return redirect('/admin/about-us/')->with('pesan','data berhasil ditambah');
+       // return redirect('/admin/about-us/')->with('pesan','data berhasil ditambah');
 
         //
     }
@@ -134,16 +134,23 @@ class AboutUsController extends Controller
      * @param  \App\Admin\About_us  $about_us
      * @return \Illuminate\Http\Response
      */
-    public function edit(About_us $about)
-    {
+     public function edit(About_us $about)
+     {
+         //dd($about);
+         return response()->json($about);
+      
+         // $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
 
-        $data = ['LoggedUserInfo'=>Admin::where('id','=',session('LoggedUser'))->first()];
+         // return view('admin.about-us.edit_about-us',compact('about'),$data);
+         //
+     }
+    // public function edit(Request $request, $about)
+    // {
 
-        return view('admin.about-us.edit_about-us',compact('about'),$data);
-    
-        //
-    }
+    //     $data = About_us::find($about);
+    //     return response()->json($data);
 
+    // }
     /**
      * Update the specified resource in storage.
      *
@@ -153,6 +160,7 @@ class AboutUsController extends Controller
      */
     public function update(Request $request, About_us $about)
     {
+        $currentPhoto = $about->image;
 
         $messages = [
             'required' => ':attribute wajib diisi cuy!!!',
@@ -160,6 +168,7 @@ class AboutUsController extends Controller
             'mimes' =>':attribute harus format jpg,jpeg,bmp,png,webp',
             'max' => ':attribute file maksimal 1 mb',
         ];
+        
         $data = request()->validate([
             //jika tidak ada validasi
             //'kosong'=>'',
@@ -173,14 +182,22 @@ class AboutUsController extends Controller
             'telp' => 'required',
             'riwayat' => 'required', 
             'pendidikan' => 'required',   
-            'image'   => 'file|max:1024|mimes:jpeg,png,jpg,gif,svg',
+           // 'image'   => 'file|max:1024|mimes:jpeg,png,jpg,gif,svg',
            
         ],$messages);
 
         if ($request->file('image')) {
+            
+            $request()->validate([
+                //jika tidak ada validasi
+                //'kosong'=>'',
+                //image.* jika error
+                'image'   => 'file|max:1024|mimes:jpeg,png,jpg,gif,svg',
+               
+            ],$messages);
 
-            if($request->oldImage){
-                    Storage::disk('public')->delete($request->oldImage); 
+            if($currentPhoto){
+                    Storage::disk('public')->delete($currentPhoto); 
             }  
         
             $imagePath = $request->file('image')->store('profile','public');
@@ -193,7 +210,7 @@ class AboutUsController extends Controller
 
         
 
-            About_us::where('id', $about->id)
+         return About_us::where('id', $about->id)
                 ->update([
                     'visi'=>$request->visi,
                     'misi' => $request->misi,
@@ -203,11 +220,11 @@ class AboutUsController extends Controller
                     'telp' =>$request->telp,
                     'riwayat' =>$request->riwayat,
                     'pendidikan' =>$request->pendidikan,
-                    'image' => $imagePath ?? $request->oldImage,
+                    'image' => $imagePath ?? $currentPhoto,
                     
                 ]);
             
-        return redirect('/admin/about-us/')->with('pesan','data berhasil diupdate');
+       // return redirect('/admin/about-us/')->with('pesan','data berhasil diupdate');
 
 
         //

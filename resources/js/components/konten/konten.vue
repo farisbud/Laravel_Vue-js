@@ -137,9 +137,10 @@
                                         </div>
                                          <div class="form-group">
                                           <label for="recipient-name" class="col-form-label">Isi konten:</label>
-                                            <VueTrix v-model="form.description" placeholder="Enter content" :class="{ 'is-invalid' : form.errors.has('description') }"/>
-                                          <has-error :form="form" field="description"></has-error>                              
-                                         </div>
+                                            <VueTrix class="form-control" v-model="form.description" :class="{ 'is-invalid' : form.errors.has('description') }"/>
+                                          <has-error :form="form" field="description"></has-error>                             
+                                        </div>
+                                        
                                          <div class="form-group" v-show="statusModal">
 
                                         
@@ -195,7 +196,8 @@
                           <!-- modal untuk detail  -->
                             <div class="modal fade" id="showModalDetail" tabindex="-1" role="dialog" aria-labelledby="showModal1" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
-                                  <div class="modal-content" style="width: 200%;">
+                                  <div class="modal-content" style="width: 200%; ">
+                                    
                                     <div class="modal-header">
                                       <h5 class="modal-title" id="exampleModalLongTitle">Detail</h5>
                                      
@@ -232,10 +234,13 @@
                                          
                                          <div class="form-group">
                                             <label for="recipient-name" class="col-form-label">Isi konten:</label>
-                                              <VueTrix v-model="form.description" placeholder="Enter content" :class="{ 'is-invalid' : form.errors.has('description') }"/>
+                                              <div contenteditable="true" v-html="form.description" >
+                                                
+                                              </div>
+                                            
                                             <has-error :form="form" field="description"></has-error>                              
                                          </div>
-
+                                         
                                          <div class="form-group">
                                           <label for="image" class="col-form-label">Gambar</label>
                                             <div v-if="form.image">
@@ -283,14 +288,14 @@ export default {
 		      console.log('component mounted');
 	      },
         components: {
-          VueTrix
+          VueTrix,
         },
       data(){
            return {
                columns: [
                  {
                    label: 'Caption',
-                   field: 'judul',
+                   field: 'caption',
                  },
                  {
                    label: 'Judul',
@@ -419,6 +424,7 @@ export default {
 
          
             showDetail(row){
+            
              this.form.reset();
              $("#showModalDetail").modal("show");
              this.form.fill(row);

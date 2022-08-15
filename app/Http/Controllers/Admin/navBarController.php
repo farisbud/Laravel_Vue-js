@@ -86,18 +86,18 @@ class navBarController extends Controller
         ];
         $request->validate([
             'email' =>'required|email',
-            'telp' => 'required',
+            'no_telp' => 'required',
             
 
         ],$messages);
 
-            Navbar::where('id', $nav)
+         return Navbar::where('id', $nav)
                     ->update([
                         'email'=>$request->email,
-                        'no_telp'=>$request->telp,
+                        'no_telp'=>$request->no_telp,
                        
                     ]);
-        return redirect('/admin/navbar')->with('pesan','Data berhasil diupdate');
+        //return redirect('/admin/navbar')->with('pesan','Data berhasil diupdate');
         //
     }
 

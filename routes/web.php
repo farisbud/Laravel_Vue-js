@@ -10,7 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+// Route::get('/', function () {
+//   return view('welcome');
+// });
 //route web
 Route::get('/','indexController@index');
 Route::get('/single-page/{sid}/show/{id}','indexController@show');
@@ -31,6 +33,7 @@ Route::get('/data-excel/{id}/detail','excelController@show');
 
 
 //route admin
+
 Route::post('/login','Admin\LoginController@log_in')->name('log_in');
 Route::get('/logout','Admin\LoginController@log_out')->name('log_out');
 
@@ -44,18 +47,19 @@ Route::get('/logout','Admin\LoginController@log_out')->name('log_out');
 
 //clear cache
 // Route::get('/clear-cache', function() {
-//     $exitCode = Artisan::call('cache:clear');
-//     // return what you want
-// });
+//      $exitCode = Artisan::call('cache:clear');
+//      // return what you want
+//  });
 
-// Route::get('/clear-cache', function() {
+//  Route::get('/clear-cache', function() {
 //     $exitCode = Artisan::call('config:clear');
 //     // return what you want
-// });
+//  });
 
-Route::middleware(['AuthCheck'])->group(function () {
+Route::middleware('AuthCheck')->group(function () {
+
+  Route::get('/admin-login','Admin\LoginController@index');
     
-    Route::get('/admin-login','Admin\LoginController@index');
     Route::get('/{any}','Admin\HomeController@index')->where('any','.*');
    // Route::get('/getSubKategori/?{any}','Admin\HomeController@index')->where('any','.*');
     //kategori
@@ -137,5 +141,3 @@ Route::middleware(['AuthCheck'])->group(function () {
 
     //Route::resource('/admin/kategori/', 'Admin\CategoryController');
 });
-
-

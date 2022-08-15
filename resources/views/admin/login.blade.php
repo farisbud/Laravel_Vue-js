@@ -48,7 +48,7 @@
             <div class="card p-4">
               <div class="card-body">
                   
-                <form action="{{route('log_in')}}" method="post">
+                <form action="{{ route('log_in') }}" method="post">
                   @if (Session::get('gagal'))
                       <div class="alert alert-danger">
                         {{Session::get('gagal')}}

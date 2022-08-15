@@ -22,18 +22,26 @@ use App\Http\Controllers\Admin\PerusahaanController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
     
-});
+// });
+
+ Route::middleware('AuthCheck:api')->group( function() {
+
+    Route::get('admin/kategori',[CategoryController::class, 'index']);
+Route::post('save_kategori','Admin\CategoryController@store');
+Route::put('update_kategori/{cat}','Admin\CategoryController@update');
+Route::delete('delete_kategori/{cat}','Admin\CategoryController@destroy');
+
+ });
+
+
 
 //admin
 Route::get('admin/',[HomeController::class, 'count']);
 //kategori
-Route::get('admin/kategori',[CategoryController::class, 'index']);
-Route::post('save_kategori','Admin\CategoryController@store');
-Route::put('update_kategori/{cat}','Admin\CategoryController@update');
-Route::delete('delete_kategori/{cat}','Admin\CategoryController@destroy');
+
 //sub_categori
 Route::get('admin/sub_kategori','Admin\SubCategoryController@index');
 Route::get('getSubKategori/{id}','Admin\SubCategoryController@show');
@@ -69,8 +77,15 @@ Route::put('update_excel/{id}','Admin\DataExcelController@update');
 Route::delete('delete_excel/{id}','Admin\DataExcelController@destroy');
 //akun
 Route::get('admin/akun','Admin\AkunController@index');
+Route::post('save_akun','Admin\AkunController@store');
+Route::put('update_akun/{akun}','Admin\AkunController@update');
+Route::delete('delete_akun/{akun}','Admin\AkunController@destroy');
+
 //navbar
 Route::get('admin/navbar','Admin\navBarController@index');
+Route::put('update_navbar/{nav}','Admin\navBarController@update');
 //about
 Route::get('admin/about','Admin\AboutUsController@index');
+Route::get('getGambar/{about}','Admin\AboutUsController@edit');
+Route::post('update_about/{about}','Admin\AboutUsController@update');
 
